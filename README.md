@@ -24,9 +24,12 @@ ZipMaster provides two main functionalities: compression and extraction.
 
 Compression:
 
-java -jar huffman_20011457.jar c absolute_path_to_input_file n
+java -jar huffman_20011457.jar c absolute_path_to_input_file n.
+
 n is the number of bytes that will be considered together.
+
 When dealing with larger input sizes (`n`), ZipMaster tends to produce smaller compressed file sizes, optimizing storage space. This is particularly beneficial when you need to conserve disk space and minimize storage costs.
+
 However, it's essential to note that as the input size (`n`) increases, the time required for compression and extraction operations may also increase. This is a common characteristic of compression algorithms, where the trade-off for smaller file sizes is a longer processing time.
 
 Extraction:
