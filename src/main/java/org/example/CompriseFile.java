@@ -25,7 +25,7 @@ public class CompriseFile {
         System.out.println("Calculating frequencies");
         int n=bytes.length();
         for (int i = 0; i < n; i+=noOfBytes) {
-            int endIndex = Math.min(i + noOfBytes, n-1);
+            int endIndex = Math.min(i + noOfBytes, n);
             String temp=  bytes.substring(i, endIndex);
             frequencies.put(temp, frequencies.getOrDefault(temp, 0) + 1);
         }
@@ -67,7 +67,7 @@ public class CompriseFile {
         int size = 0;
         int n=bytes.length();
         for (int i = 0; i < n; i+=noOfBytes) {
-            int endIndex = Math.min(i + noOfBytes, n-1);
+            int endIndex = Math.min(i + noOfBytes, n);
             String unitOfHashing=  bytes.substring(i, endIndex);
             String temp = hashedValues.get(unitOfHashing);
             for (Character aBit : temp.toCharArray()) {
