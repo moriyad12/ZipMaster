@@ -8,9 +8,8 @@ class CompriseFileTest {
     @Test
     public void test(){
         CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq",6);
+        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq",1);
         ExtractFile extractFile = new ExtractFile();
-        extractFile.setHashMap(compriseFile.getHashedValues());
         extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq.hc");
     }
     @Test
@@ -18,7 +17,6 @@ class CompriseFileTest {
         CompriseFile compriseFile = new CompriseFile();
         compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf",1);
         ExtractFile extractFile = new ExtractFile();
-        extractFile.setHashMap(compriseFile.getHashedValues());
         extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
     }
     @Test
@@ -26,16 +24,14 @@ class CompriseFileTest {
         CompriseFile compriseFile = new CompriseFile();
         compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg",1);
         ExtractFile extractFile = new ExtractFile();
-        extractFile.setHashMap(compriseFile.getHashedValues());
         extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg.hc");
     }
     @Test
     public void test4(){
         CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in",1);
+        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt",1);
         ExtractFile extractFile = new ExtractFile();
-        extractFile.setHashMap(compriseFile.getHashedValues());
-        extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.hc");
+        extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt.hc");
     }
 
 }

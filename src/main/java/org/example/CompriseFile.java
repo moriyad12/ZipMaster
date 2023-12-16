@@ -25,8 +25,7 @@ public class CompriseFile {
         System.out.println("Calculating frequencies");
         int n=bytes.length();
         for (int i = 0; i < n; i+=noOfBytes) {
-            int endIndex = Math.min(i + noOfBytes, n);
-            String temp=  bytes.substring(i, endIndex);
+            String temp=  bytes.substring(i, i + noOfBytes);
             frequencies.put(temp, frequencies.getOrDefault(temp, 0) + 1);
         }
     }
@@ -62,13 +61,29 @@ public class CompriseFile {
         dfs(children.get(0), code + "0");
         dfs(children.get(1), code + "1");
     }
+    public void writeHashMapToFile(String fileName){
+        try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
+            fileOutputStream.write((char)noOfBytes);
+            for (Map.Entry<String, String> entry : hashedValues.entrySet()) {
+                for (char aByte : entry.getValue().toCharArray()) {
+                    fileOutputStream.write(aByte);
+                }
+                fileOutputStream.write(' ');
+                for (char aByte : entry.getKey().toCharArray()) {
+                    fileOutputStream.write(aByte);
+                }
+            }
+            fileOutputStream.write('\r');
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
     private void writingBytes(BufferedOutputStream fileOutputStream) throws IOException {
         byte byteOfOutput = 0;
         int size = 0;
         int n=bytes.length();
         for (int i = 0; i < n; i+=noOfBytes) {
-            int endIndex = Math.min(i + noOfBytes, n);
-            String unitOfHashing=  bytes.substring(i, endIndex);
+            String unitOfHashing=  bytes.substring(i, i + noOfBytes);
             String temp = hashedValues.get(unitOfHashing);
             for (Character aBit : temp.toCharArray()) {
                 if (aBit == '1') {
@@ -98,6 +113,7 @@ public class CompriseFile {
         putInPriorityQueue();
         huffmanCoding();
         dfs(root, "");
+        writeHashMapToFile(fileName+".hc");
         printComprisedFile(fileName+".hc");
     }
 
@@ -112,10 +128,10 @@ public class CompriseFile {
             System.out.println("File not found");
         }
         System.out.println("File read successfully");
+        while (bytes.length() % noOfBytes != 0) {
+            bytes.append((char) 0);
+        }
         comprise(fileName);
     }
 
-    public HashMap<String,String> getHashedValues() {
-        return hashedValues;
-    }
 }

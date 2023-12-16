@@ -1,12 +1,8 @@
 package org.example;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ExtractFile {
 
@@ -18,9 +14,25 @@ public class ExtractFile {
         this.hashedValues = new HashMap<>();
     }
 
-    public void setHashMap(HashMap<String, String> oldHashMap) {
-        for (Map.Entry<String, String> entry : oldHashMap.entrySet()) {
-            hashedValues.put(entry.getValue(), entry.getKey());
+    private void readHashMapFromFile( BufferedInputStream input) throws IOException {
+        int byteOfInput;
+        int noOfBytes = input.read();
+        String temp = "";
+        while (true) {
+            byteOfInput = input.read();
+            if ((char) byteOfInput == '\r')
+                break;
+            if ((char) byteOfInput == ' ') {
+                String value = temp;
+                temp = "";
+                for (int i = 0; i < noOfBytes; i++) {
+                    temp += (char) input.read();
+                }
+                hashedValues.put(value, temp);
+                temp = "";
+            } else {
+                temp += (char) byteOfInput;
+            }
         }
     }
 
@@ -63,6 +75,7 @@ public class ExtractFile {
         String outputFileName= fileName.substring(0, index)+"\\extracted."+fileName.substring(index+1);
         outputFileName=outputFileName.replace(".hc", "");
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName))) {
+            readHashMapFromFile(input);
             int byteOfInput;
             String temp = "";
             while ((byteOfInput = input.read()) != -1) {
