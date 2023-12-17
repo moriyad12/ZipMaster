@@ -6,9 +6,12 @@ import org.junit.jupiter.api.Test;
 
 class CompriseFileTest {
     @Test
-    public void test(){
+    public void testC(){
         CompriseFile compriseFile = new CompriseFile();
         compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq",1);
+    }
+    @Test
+    public void testD(){
         ExtractFile extractFile = new ExtractFile();
         extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq.hc");
     }

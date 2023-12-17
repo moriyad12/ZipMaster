@@ -17,21 +17,21 @@ public class ExtractFile {
     private void readHashMapFromFile( BufferedInputStream input) throws IOException {
         int byteOfInput;
         int noOfBytes = input.read();
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         while (true) {
             byteOfInput = input.read();
             if ((char) byteOfInput == '\r')
                 break;
             if ((char) byteOfInput == ' ') {
-                String value = temp;
-                temp = "";
+                String value = temp.toString();
+                temp = new StringBuilder();
                 for (int i = 0; i < noOfBytes; i++) {
-                    temp += (char) input.read();
+                    temp.append((char) input.read());
                 }
-                hashedValues.put(value, temp);
-                temp = "";
+                hashedValues.put(value, temp.toString());
+                temp = new StringBuilder();
             } else {
-                temp += (char) byteOfInput;
+                temp.append((char) byteOfInput);
             }
         }
     }
