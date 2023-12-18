@@ -25,7 +25,7 @@ class CompriseFileTest {
     @Test
     public void test3(){
         CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg",1);
+        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg",5);
         ExtractFile extractFile = new ExtractFile();
         extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg.hc");
     }
@@ -36,5 +36,6 @@ class CompriseFileTest {
         ExtractFile extractFile = new ExtractFile();
         extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt.hc");
     }
+
 
 }
