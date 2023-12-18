@@ -12,6 +12,7 @@ public class CompriseFile {
     private Pair root;
     private byte byteOfOutput = 0;
     private int sizeOfByte = 0;
+    private long noOfBytesRead = 0;
 
 
     public CompriseFile() {
@@ -52,15 +53,15 @@ public class CompriseFile {
         dfs(children.get(0), code + "0");
         dfs(children.get(1), code + "1");
     }
-
     public void writeHashMapToFile(String fileName) {
         try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
-            fileOutputStream.write((char) noOfBytes);
+            fileOutputStream.write(String.valueOf(noOfBytesRead).getBytes());
+            fileOutputStream.write('\r');
             for (Map.Entry<String, String> entry : hashedValues.entrySet()) {
                 for (char aByte : entry.getValue().toCharArray()) {
                     fileOutputStream.write(aByte);
                 }
-                fileOutputStream.write(' ');
+                fileOutputStream.write((char)entry.getKey().length());
                 for (char aByte : entry.getKey().toCharArray()) {
                     fileOutputStream.write(aByte);
                 }
@@ -82,14 +83,11 @@ public class CompriseFile {
                     bytes = "";
                 }
             }
+            if (!bytes.isEmpty()) {
+                writingByte(fileOutputStream, bytes);
+            }
         } catch (Exception e) {
             System.out.println("File not found");
-        }
-        while (bytes.length() % noOfBytes != 0) {
-            bytes += (char) 0;
-        }
-        if (!bytes.isEmpty()) {
-            writingByte(fileOutputStream, bytes);
         }
     }
 
@@ -112,6 +110,9 @@ public class CompriseFile {
         try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(outputFileName, true))) {
             System.out.println("Converting to binary");
             readByte(fileOutputStream, inputFileName);
+            if (sizeOfByte != 0) {
+                fileOutputStream.write(byteOfOutput);
+            }
             System.out.println("File compressed successfully");
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -133,23 +134,19 @@ public class CompriseFile {
             int byteOfInput;
             while ((byteOfInput = input.read()) != -1) {
                 bytes += (char) byteOfInput;
+                noOfBytesRead++;
                 if (bytes.length() == noOfBytes) {
                     frequencies.put(bytes, frequencies.getOrDefault(bytes, 0) + 1);
                     bytes = "";
                 }
             }
+            if (!bytes.isEmpty()) {
+                frequencies.put(bytes, frequencies.getOrDefault(bytes, 0) + 1);
+            }
         } catch (Exception e) {
             System.out.println("File not found");
         }
         System.out.println("File read successfully");
-        while (bytes.length() % noOfBytes != 0) {
-            bytes += (char) 0;
-        }
-        if (!bytes.isEmpty()) {
-            frequencies.put(bytes, frequencies.getOrDefault(bytes, 0) + 1);
-        }
         comprise(fileName);
     }
-
-
 }

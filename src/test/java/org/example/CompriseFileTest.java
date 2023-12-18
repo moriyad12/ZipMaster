@@ -18,7 +18,7 @@ class CompriseFileTest {
     @Test
     public void test2(){
         CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf",1);
+        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf",9);
         ExtractFile extractFile = new ExtractFile();
         extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
     }

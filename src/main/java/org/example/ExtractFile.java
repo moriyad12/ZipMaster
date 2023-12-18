@@ -8,24 +8,36 @@ public class ExtractFile {
 
     private final ArrayList<Byte> bytes;
     private final HashMap<String, String> hashedValues;
+    private long noOfBytes;
 
     public ExtractFile() {
         this.bytes = new ArrayList<>();
         this.hashedValues = new HashMap<>();
     }
 
-    private void readHashMapFromFile( BufferedInputStream input) throws IOException {
+    private void readNoOfBytes(BufferedInputStream input) throws IOException {
+        StringBuilder temp = new StringBuilder();
         int byteOfInput;
-        int noOfBytes = input.read();
+        while (true) {
+            byteOfInput = input.read();
+            if ((char) byteOfInput == '\r')
+                break;
+            temp.append((char) byteOfInput);
+        }
+        noOfBytes = Long.parseLong(temp.toString());
+    }
+
+    private void readHashMapFromFile(BufferedInputStream input) throws IOException {
+        int byteOfInput;
         StringBuilder temp = new StringBuilder();
         while (true) {
             byteOfInput = input.read();
             if ((char) byteOfInput == '\r')
                 break;
-            if ((char) byteOfInput == ' ') {
+            if ((char) byteOfInput != '0' && (char) byteOfInput != '1') {
                 String value = temp.toString();
                 temp = new StringBuilder();
-                for (int i = 0; i < noOfBytes; i++) {
+                for (int i = 0; i < byteOfInput; i++) {
                     temp.append((char) input.read());
                 }
                 hashedValues.put(value, temp.toString());
@@ -40,7 +52,10 @@ public class ExtractFile {
         int n = bytes.size();
         try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
             for (int i = 0; i < n; i++) {
-                fileOutputStream.write(bytes.get(i));
+                if (noOfBytes != 0) {
+                    fileOutputStream.write(bytes.get(i));
+                    noOfBytes--;
+                }
             }
         } catch (Exception e) {
             System.out.println("File not found");
@@ -58,8 +73,8 @@ public class ExtractFile {
             }
             if (hashedValues.containsKey(temp)) {
                 String value = hashedValues.get(temp);
-                for( int j=0;j<value.length();j++)
-                   bytes.add((byte)value.charAt(j));
+                for (int j = 0; j < value.length(); j++)
+                    bytes.add((byte) value.charAt(j));
                 temp = "";
                 if (bytes.size() >= 100000) {
                     printExtractedFile(outPutFileName);
@@ -72,14 +87,15 @@ public class ExtractFile {
 
     public void takeInputFromComprisedFile(String fileName) {
         int index = fileName.lastIndexOf("\\");
-        String outputFileName= fileName.substring(0, index)+"\\extracted."+fileName.substring(index+1);
-        outputFileName=outputFileName.replace(".hc", "");
+        String outputFileName = fileName.substring(0, index) + "\\extracted." + fileName.substring(index + 1);
+        outputFileName = outputFileName.replace(".hc", "");
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName))) {
+            readNoOfBytes(input);
             readHashMapFromFile(input);
             int byteOfInput;
             String temp = "";
             while ((byteOfInput = input.read()) != -1) {
-                temp=decode(byteOfInput, temp, outputFileName);
+                temp = decode(byteOfInput, temp, outputFileName);
             }
             printExtractedFile(outputFileName);
         } catch (Exception e) {
