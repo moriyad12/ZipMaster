@@ -10,9 +10,27 @@ public class ExtractFile {
     private final HashMap<String, String> hashedValues;
     private long noOfBytes;
 
-    public ExtractFile() {
+    public ExtractFile(String fileName) {
         this.bytes = new ArrayList<>();
         this.hashedValues = new HashMap<>();
+        takeInputFromComprisedFile(fileName);
+    }
+    private void takeInputFromComprisedFile(String fileName) {
+        int index = fileName.lastIndexOf("\\");
+        String outputFileName = fileName.substring(0, index) + "\\extracted." + fileName.substring(index + 1);
+        outputFileName = outputFileName.replace(".hc", "");
+        try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName))) {
+            readNoOfBytes(input);
+            readHashMapFromFile(input);
+            int byteOfInput;
+            String temp = "";
+            while ((byteOfInput = input.read()) != -1) {
+                temp = decode(byteOfInput, temp, outputFileName);
+            }
+            printExtractedFile(outputFileName);
+        } catch (Exception e) {
+            System.out.println("File not found");
+        }
     }
 
     private void readNoOfBytes(BufferedInputStream input) throws IOException {
@@ -47,21 +65,6 @@ public class ExtractFile {
             }
         }
     }
-
-    private void printExtractedFile(String fileName) {
-        int n = bytes.size();
-        try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
-            for (int i = 0; i < n; i++) {
-                if (noOfBytes != 0) {
-                    fileOutputStream.write(bytes.get(i));
-                    noOfBytes--;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("File not found");
-        }
-    }
-
     private String decode(int byteOfInput, String temp, String outPutFileName) {
         if (byteOfInput > 127)
             byteOfInput -= 256;
@@ -85,21 +88,18 @@ public class ExtractFile {
         return temp;
     }
 
-    public void takeInputFromComprisedFile(String fileName) {
-        int index = fileName.lastIndexOf("\\");
-        String outputFileName = fileName.substring(0, index) + "\\extracted." + fileName.substring(index + 1);
-        outputFileName = outputFileName.replace(".hc", "");
-        try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName))) {
-            readNoOfBytes(input);
-            readHashMapFromFile(input);
-            int byteOfInput;
-            String temp = "";
-            while ((byteOfInput = input.read()) != -1) {
-                temp = decode(byteOfInput, temp, outputFileName);
+    private void printExtractedFile(String fileName) {
+        int n = bytes.size();
+        try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
+            for (int i = 0; i < n; i++) {
+                if (noOfBytes != 0) {
+                    fileOutputStream.write(bytes.get(i));
+                    noOfBytes--;
+                }
             }
-            printExtractedFile(outputFileName);
         } catch (Exception e) {
             System.out.println("File not found");
         }
     }
+
 }

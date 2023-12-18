@@ -6,35 +6,35 @@ import org.junit.jupiter.api.Test;
 
 class CompriseFileTest {
     @Test
-    public void testC(){
-        CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq",1);
+    public void testC() {
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq", 1);
     }
+
     @Test
-    public void testD(){
-        ExtractFile extractFile = new ExtractFile();
-        extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq.hc");
+    public void testD() {
+        new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq.hc");
+        new HashingFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq", "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.gbbct10.seq");
     }
+
     @Test
-    public void test2(){
-        CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf",9);
-        ExtractFile extractFile = new ExtractFile();
-        extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
+    public void test2() {
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", 9);
+        new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
+        new HashingFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf");
     }
+
     @Test
-    public void test3(){
-        CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg",5);
-        ExtractFile extractFile = new ExtractFile();
-        extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg.hc");
+    public void test3() {
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg", 5);
+        new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg.hc");
+        new HashingFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg", "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.IMG_2741.jpg");
     }
+
     @Test
-    public void test4(){
-        CompriseFile compriseFile = new CompriseFile();
-        compriseFile.takeInputFromExtractedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt",1);
-        ExtractFile extractFile = new ExtractFile();
-        extractFile.takeInputFromComprisedFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt.hc");
+    public void test4() {
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt", 1);
+        ExtractFile extractFile = new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt.hc");
+        new HashingFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt", "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.test1.in.txt");
     }
 
 

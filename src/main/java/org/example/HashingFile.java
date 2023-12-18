@@ -7,7 +7,7 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class BufferedFileHasher {
+public class HashingFile {
 
     public static String calculateHash(String filePath) throws NoSuchAlgorithmException, IOException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -29,13 +29,10 @@ public class BufferedFileHasher {
         return hashStringBuilder.toString();
     }
 
-    public static void main(String[] args) {
+    public HashingFile(String fileName1, String fileName2) {
         try {
-            String file1Path = "F:\\ZipMaster\\src\\main\\java\\org\\example\\IMG_2741.jpg";
-            String file2Path = "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.IMG_2741.jpg";
-
-            String hash1 = calculateHash(file1Path);
-            String hash2 = calculateHash(file2Path);
+            String hash1 = calculateHash(fileName1);
+            String hash2 = calculateHash(fileName2);
 
             System.out.println("Hash of file1: " + hash1);
             System.out.println("Hash of file2: " + hash2);
