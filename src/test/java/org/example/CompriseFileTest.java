@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class CompriseFileTest {
     @Test
     public void testC() {
-        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq", 1);
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq", 8);
     }
 
     @Test
@@ -18,9 +18,9 @@ class CompriseFileTest {
 
     @Test
     public void test2() {
-        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", 9);
-        new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
-        new HashingFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.8. Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf");
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", 1);
+        new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
+        new HashingFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf");
     }
 
     @Test
@@ -36,6 +36,5 @@ class CompriseFileTest {
         ExtractFile extractFile = new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt.hc");
         new HashingFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\test1.in.txt", "F:\\ZipMaster\\src\\main\\java\\org\\example\\extracted.test1.in.txt");
     }
-
 
 }

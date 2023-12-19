@@ -13,6 +13,7 @@ public class CompriseFile {
     private byte byteOfOutput;
     private int sizeOfByte;
     private long noOfBytesRead;
+    private final int maxSize = 50000000;
 
 
     public CompriseFile(String fileName, int noOfBytes) {
@@ -37,24 +38,29 @@ public class CompriseFile {
 
     private void takeInputFromExtractedFile(String fileName, int noOfBytes) {
         this.noOfBytes = noOfBytes;
-        String bytes = "";
+        byte[] bytes = new byte[maxSize + maxSize % noOfBytes];
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName))) {
             int byteOfInput;
-            while ((byteOfInput = input.read()) != -1) {
-                bytes += (char) byteOfInput;
-                noOfBytesRead++;
-                if (bytes.length() == noOfBytes) {
-                    frequencies.put(bytes, frequencies.getOrDefault(bytes, 0) + 1);
-                    bytes = "";
-                }
+            while ((byteOfInput = input.read(bytes)) != -1) {
+                calculateFrequency(byteOfInput, bytes);
             }
-            if (!bytes.isEmpty()) {
-                frequencies.put(bytes, frequencies.getOrDefault(bytes, 0) + 1);
-            }
+            bytes = null;
         } catch (Exception e) {
             System.out.println("File not found");
         }
         System.out.println("File read successfully");
+    }
+
+    private void calculateFrequency(int size, byte[] bytes) {
+        String temp = "";
+        for (int i = 0; i < size; i += noOfBytes) {
+            for (int j = i; j < i + noOfBytes && j < size; j++) {
+                temp += (char) bytes[j];
+                noOfBytesRead++;
+            }
+            frequencies.put(temp, frequencies.getOrDefault(temp, 0) + 1);
+            temp = "";
+        }
     }
 
     private void putInPriorityQueue() {
@@ -87,8 +93,8 @@ public class CompriseFile {
     private void dfs(Pair node, String code) {
         Vector<Pair> children = tree.get(node);
         if (children == null) {
-            if (node!=root)
-            hashedValues.put(node.getSecond(), code);
+            if (node != root)
+                hashedValues.put(node.getSecond(), code);
             return;
         }
         dfs(children.get(0), code + "0");
@@ -102,7 +108,7 @@ public class CompriseFile {
             for (Map.Entry<String, String> entry : hashedValues.entrySet()) {
                 String value = entry.getValue();
                 String key = entry.getKey();
-                for (int i = 0; i <value.length(); i++) {
+                for (int i = 0; i < value.length(); i++) {
                     fileOutputStream.write(value.charAt(i));
                 }
                 fileOutputStream.write((char) key.length());
@@ -130,35 +136,35 @@ public class CompriseFile {
     }
 
     public void readByte(BufferedOutputStream fileOutputStream, String inputFileName) throws IOException {
-        String bytes = "";
+        byte[] bytes = new byte[maxSize + maxSize % noOfBytes];
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(inputFileName))) {
             int byteOfInput;
-            while ((byteOfInput = input.read()) != -1) {
-                bytes += (char) byteOfInput;
-                if (bytes.length() == noOfBytes) {
-                    writeByte(fileOutputStream, bytes);
-                    bytes = "";
-                }
-            }
-            if (!bytes.isEmpty()) {
-                writeByte(fileOutputStream, bytes);
+            while ((byteOfInput = input.read(bytes)) != -1) {
+                writeByte(fileOutputStream, byteOfInput, bytes);
             }
         } catch (Exception e) {
-            System.out.println("File not found");
+            System.out.println(e.getMessage());
         }
     }
 
-    private void writeByte(BufferedOutputStream fileOutputStream, String bytes) throws IOException {
-        String temp = hashedValues.get(bytes);
-        for (int i = 0; i < temp.length(); i++) {
-            if (temp.charAt(i) == '1') {
-                byteOfOutput |= (byte) (1 << (7 - sizeOfByte));
+    private void writeByte(BufferedOutputStream fileOutputStream, int size, byte[] bytes) throws IOException {
+        String temp = "";
+        for (int i = 0; i < size; i += noOfBytes) {
+            for (int j = i; j < i + noOfBytes && j < size; j++) {
+                temp += (char) bytes[j];
             }
-            sizeOfByte++;
-            if (sizeOfByte == 8) {
-                fileOutputStream.write(byteOfOutput);
-                sizeOfByte = 0;
-                byteOfOutput = 0;
+            String hashedValue = hashedValues.get(temp);
+            temp = "";
+            for (int j = 0; j < hashedValue.length(); j++) {
+                if (hashedValue.charAt(j) == '1') {
+                    byteOfOutput |= (byte) (1 << (7 - sizeOfByte));
+                }
+                sizeOfByte++;
+                if (sizeOfByte == 8) {
+                    fileOutputStream.write(byteOfOutput);
+                    sizeOfByte = 0;
+                    byteOfOutput = 0;
+                }
             }
         }
     }
