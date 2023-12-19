@@ -66,6 +66,11 @@ public class CompriseFile {
 
     private void huffmanCoding() {
         System.out.println("Huffman coding started");
+        if (priorityQueue.size() == 1) {
+            root = priorityQueue.poll();
+            hashedValues.put(root.getSecond(), "0");
+            return;
+        }
         while (priorityQueue.size() > 1) {
             Pair pair1 = priorityQueue.poll();
             Pair pair2 = priorityQueue.poll();
@@ -82,6 +87,7 @@ public class CompriseFile {
     private void dfs(Pair node, String code) {
         Vector<Pair> children = tree.get(node);
         if (children == null) {
+            if (node!=root)
             hashedValues.put(node.getSecond(), code);
             return;
         }
@@ -94,12 +100,14 @@ public class CompriseFile {
             fileOutputStream.write(String.valueOf(noOfBytesRead).getBytes());
             fileOutputStream.write('\r');
             for (Map.Entry<String, String> entry : hashedValues.entrySet()) {
-                for (char aByte : entry.getValue().toCharArray()) {
-                    fileOutputStream.write(aByte);
+                String value = entry.getValue();
+                String key = entry.getKey();
+                for (int i = 0; i <value.length(); i++) {
+                    fileOutputStream.write(value.charAt(i));
                 }
-                fileOutputStream.write((char) entry.getKey().length());
-                for (char aByte : entry.getKey().toCharArray()) {
-                    fileOutputStream.write(aByte);
+                fileOutputStream.write((char) key.length());
+                for (int i = 0; i < key.length(); i++) {
+                    fileOutputStream.write(key.charAt(i));
                 }
             }
             fileOutputStream.write('\r');
