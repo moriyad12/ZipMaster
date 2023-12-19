@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class CompriseFileTest {
     @Test
     public void testC() {
-        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq", 8);
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\gbbct10.seq", 5);
     }
 
     @Test

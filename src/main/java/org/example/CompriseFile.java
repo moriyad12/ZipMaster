@@ -42,25 +42,21 @@ public class CompriseFile {
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName))) {
             int byteOfInput;
             while ((byteOfInput = input.read(bytes)) != -1) {
-                calculateFrequency(byteOfInput, bytes);
+                String temp = "";
+                for (int i = 0; i < byteOfInput; i += noOfBytes) {
+                    for (int j = i; j < i + noOfBytes && j < byteOfInput; j++) {
+                        temp += (char) bytes[j];
+                        noOfBytesRead++;
+                    }
+                    frequencies.put(temp, frequencies.getOrDefault(temp, 0) + 1);
+                    temp = "";
+                }
             }
             bytes = null;
         } catch (Exception e) {
             System.out.println("File not found");
         }
         System.out.println("File read successfully");
-    }
-
-    private void calculateFrequency(int size, byte[] bytes) {
-        String temp = "";
-        for (int i = 0; i < size; i += noOfBytes) {
-            for (int j = i; j < i + noOfBytes && j < size; j++) {
-                temp += (char) bytes[j];
-                noOfBytesRead++;
-            }
-            frequencies.put(temp, frequencies.getOrDefault(temp, 0) + 1);
-            temp = "";
-        }
     }
 
     private void putInPriorityQueue() {

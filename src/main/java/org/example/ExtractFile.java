@@ -13,13 +13,22 @@ public class ExtractFile {
     public ExtractFile(String fileName) {
         this.bytes = new ArrayList<>();
         this.hashedValues = new HashMap<>();
-        takeInputFromComprisedFile(fileName);
+        extractFile(fileName);
     }
-    private void takeInputFromComprisedFile(String fileName) {
+
+    private void extractFile(String fileName) {
         int index = fileName.lastIndexOf("\\");
         String outputFileName = fileName.substring(0, index) + "\\extracted." + fileName.substring(index + 1);
         outputFileName = outputFileName.replace(".hc", "");
-        try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(fileName))) {
+        try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(outputFileName, true))) {
+            readInput(fileName, fileOutputStream);
+        } catch (Exception e) {
+            System.out.println("File not found");
+        }
+    }
+
+    private void readInput(String inputFileName, BufferedOutputStream outputFileName) {
+        try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(inputFileName))) {
             readNoOfBytes(input);
             readHashMapFromFile(input);
             int byteOfInput;
@@ -27,7 +36,6 @@ public class ExtractFile {
             while ((byteOfInput = input.read()) != -1) {
                 temp = decode(byteOfInput, temp, outputFileName);
             }
-            printExtractedFile(outputFileName);
         } catch (Exception e) {
             System.out.println("File not found");
         }
@@ -65,7 +73,8 @@ public class ExtractFile {
             }
         }
     }
-    private String decode(int byteOfInput, String temp, String outPutFileName) {
+
+    private String decode(int byteOfInput, String temp, BufferedOutputStream outPutFileName) throws IOException {
         if (byteOfInput > 127)
             byteOfInput -= 256;
         for (int i = 0; i < 8; i++) {
@@ -77,28 +86,17 @@ public class ExtractFile {
             if (hashedValues.containsKey(temp)) {
                 String value = hashedValues.get(temp);
                 for (int j = 0; j < value.length(); j++)
-                    bytes.add((byte) value.charAt(j));
+                    printByte(outPutFileName, (byte) value.charAt(j));
                 temp = "";
-                if (bytes.size() >= 100000) {
-                    printExtractedFile(outPutFileName);
-                    bytes.clear();
-                }
             }
         }
         return temp;
     }
 
-    private void printExtractedFile(String fileName) {
-        int n = bytes.size();
-        try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
-            for (int i = 0; i < n; i++) {
-                if (noOfBytes != 0) {
-                    fileOutputStream.write(bytes.get(i));
-                    noOfBytes--;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("File not found");
+    private void printByte(BufferedOutputStream fileOutputStream, byte aByte) throws IOException {
+        if (noOfBytes != 0) {
+            fileOutputStream.write(aByte);
+            noOfBytes--;
         }
     }
 
