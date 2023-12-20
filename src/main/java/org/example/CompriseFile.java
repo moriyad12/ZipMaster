@@ -13,10 +13,12 @@ public class CompriseFile {
     private byte byteOfOutput;
     private int sizeOfByte;
     private long noOfBytesRead;
+    private long noOfBytesWritten;
     private final int maxSize = 50000000;
 
 
     public CompriseFile(String fileName, int noOfBytes) {
+        long startTime = System.currentTimeMillis();
         this.frequencies = new HashMap<>();
         this.hashedValues = new HashMap<>();
         this.priorityQueue = new PriorityQueue<>();
@@ -25,6 +27,9 @@ public class CompriseFile {
         this.byteOfOutput = 0;
         this.sizeOfByte = 0;
         comprise(fileName, noOfBytes);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time taken: " + (endTime - startTime)/1000.0 + "s");
+        System.out.println("Compression ratio: " + (double) noOfBytesWritten / noOfBytesRead);
     }
 
     private void comprise(String fileName, int noOfBytes) {
@@ -102,16 +107,19 @@ public class CompriseFile {
     public void writeHashMapToFile(String fileName) {
         try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
             fileOutputStream.write(String.valueOf(noOfBytesRead).getBytes());
+            noOfBytesWritten+=String.valueOf(noOfBytesRead).getBytes().length;
             fileOutputStream.write('\r');
             for (Map.Entry<String, String> entry : hashedValues.entrySet()) {
                 String value = entry.getValue();
                 String key = entry.getKey();
                 for (int i = 0; i < value.length(); i++) {
                     fileOutputStream.write(value.charAt(i));
+                    noOfBytesWritten++;
                 }
                 fileOutputStream.write((char) key.length());
                 for (int i = 0; i < key.length(); i++) {
                     fileOutputStream.write(key.charAt(i));
+                    noOfBytesWritten++;
                 }
             }
             fileOutputStream.write('\r');
@@ -125,6 +133,7 @@ public class CompriseFile {
             readBytes(fileOutputStream, inputFileName);
             if (sizeOfByte != 0) {
                 fileOutputStream.write(byteOfOutput);
+                noOfBytesWritten++;
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -162,19 +171,11 @@ public class CompriseFile {
             sizeOfByte++;
             if (sizeOfByte == 8) {
                 fileOutputStream.write(byteOfOutput);
+                noOfBytesWritten++;
                 sizeOfByte = 0;
                 byteOfOutput = 0;
             }
         }
     }
 
-    public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Invalid number of arguments");
-            return;
-        }
-        String fileName = args[0];
-        int noOfBytes = Integer.parseInt(args[1]);
-        new CompriseFile(fileName, noOfBytes);
-    }
 }

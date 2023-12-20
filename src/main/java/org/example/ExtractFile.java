@@ -8,9 +8,12 @@ public class ExtractFile {
     private long noOfBytes;
 
     public ExtractFile(String fileName) {
+        long startTime = System.currentTimeMillis();
         this.hashedValues = new HashMap<>();
         extractFile(fileName);
+        long endTime = System.currentTimeMillis();
         System.out.println("Extracted file successfully!");
+        System.out.println("Time taken: " + (endTime - startTime)/1000.0 + "s");
     }
 
     private void extractFile(String fileName) {
@@ -97,13 +100,5 @@ public class ExtractFile {
         }
     }
 
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Invalid number of arguments");
-            return;
-        }
-        new ExtractFile(args[0]);
-
-    }
 
 }
