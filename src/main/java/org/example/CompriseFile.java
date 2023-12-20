@@ -32,8 +32,14 @@ public class CompriseFile {
         putInPriorityQueue();
         huffmanCoding();
         dfs(root, "");
-        writeHashMapToFile(fileName + ".hc");
-        writeDataToFile(fileName + ".hc", fileName);
+        writeHashMapToFile(convertFileName(fileName, noOfBytes));
+        writeDataToFile(convertFileName(fileName, noOfBytes), fileName);
+        System.out.println("Compressed file successfully!");
+    }
+
+    private String convertFileName(String fileName, int noOfBytes) {
+        int index = fileName.lastIndexOf("\\");
+        return fileName.substring(0, index) + "\\20011457." + noOfBytes + "." + fileName.substring(index + 1) + ".hc";
     }
 
     private void takeInputFromExtractedFile(String fileName, int noOfBytes) {
@@ -52,22 +58,18 @@ public class CompriseFile {
                     temp = "";
                 }
             }
-            bytes = null;
         } catch (Exception e) {
-            System.out.println("File not found");
+            System.out.println(e.getMessage());
         }
-        System.out.println("File read successfully");
     }
 
     private void putInPriorityQueue() {
-        System.out.println("Putting in priority queue");
         for (String key : frequencies.keySet()) {
             priorityQueue.add(new Pair(frequencies.get(key), key));
         }
     }
 
     private void huffmanCoding() {
-        System.out.println("Huffman coding started");
         if (priorityQueue.size() == 1) {
             root = priorityQueue.poll();
             hashedValues.put(root.getSecond(), "0");
@@ -120,48 +122,59 @@ public class CompriseFile {
 
     private void writeDataToFile(String outputFileName, String inputFileName) {
         try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(outputFileName, true))) {
-            System.out.println("Converting to binary");
-            readByte(fileOutputStream, inputFileName);
+            readBytes(fileOutputStream, inputFileName);
             if (sizeOfByte != 0) {
                 fileOutputStream.write(byteOfOutput);
             }
-            System.out.println("File compressed successfully");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void readByte(BufferedOutputStream fileOutputStream, String inputFileName) throws IOException {
+    public void readBytes(BufferedOutputStream fileOutputStream, String inputFileName) {
         byte[] bytes = new byte[maxSize + maxSize % noOfBytes];
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(inputFileName))) {
             int byteOfInput;
             while ((byteOfInput = input.read(bytes)) != -1) {
-                writeByte(fileOutputStream, byteOfInput, bytes);
+                getHashedValueOfBytes(fileOutputStream, byteOfInput, bytes);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void writeByte(BufferedOutputStream fileOutputStream, int size, byte[] bytes) throws IOException {
+    private void getHashedValueOfBytes(BufferedOutputStream fileOutputStream, int size, byte[] bytes) throws IOException {
         String temp = "";
         for (int i = 0; i < size; i += noOfBytes) {
             for (int j = i; j < i + noOfBytes && j < size; j++) {
                 temp += (char) bytes[j];
             }
-            String hashedValue = hashedValues.get(temp);
+            convertToBinaryAndWriteByte(fileOutputStream,hashedValues.get(temp));
             temp = "";
-            for (int j = 0; j < hashedValue.length(); j++) {
-                if (hashedValue.charAt(j) == '1') {
-                    byteOfOutput |= (byte) (1 << (7 - sizeOfByte));
-                }
-                sizeOfByte++;
-                if (sizeOfByte == 8) {
-                    fileOutputStream.write(byteOfOutput);
-                    sizeOfByte = 0;
-                    byteOfOutput = 0;
-                }
+        }
+    }
+
+    private void convertToBinaryAndWriteByte(BufferedOutputStream fileOutputStream, String hashedValue) throws IOException {
+        for (int j = 0; j < hashedValue.length(); j++) {
+            if (hashedValue.charAt(j) == '1') {
+                byteOfOutput |= (byte) (1 << (7 - sizeOfByte));
+            }
+            sizeOfByte++;
+            if (sizeOfByte == 8) {
+                fileOutputStream.write(byteOfOutput);
+                sizeOfByte = 0;
+                byteOfOutput = 0;
             }
         }
+    }
+
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            System.out.println("Invalid number of arguments");
+            return;
+        }
+        String fileName = args[0];
+        int noOfBytes = Integer.parseInt(args[1]);
+        new CompriseFile(fileName, noOfBytes);
     }
 }

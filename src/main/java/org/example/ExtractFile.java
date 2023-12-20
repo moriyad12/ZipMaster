@@ -1,19 +1,16 @@
 package org.example;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExtractFile {
-
-    private final ArrayList<Byte> bytes;
     private final HashMap<String, String> hashedValues;
     private long noOfBytes;
 
     public ExtractFile(String fileName) {
-        this.bytes = new ArrayList<>();
         this.hashedValues = new HashMap<>();
         extractFile(fileName);
+        System.out.println("Extracted file successfully!");
     }
 
     private void extractFile(String fileName) {
@@ -23,7 +20,7 @@ public class ExtractFile {
         try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(outputFileName, true))) {
             readInput(fileName, fileOutputStream);
         } catch (Exception e) {
-            System.out.println("File not found");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -37,7 +34,7 @@ public class ExtractFile {
                 temp = decode(byteOfInput, temp, outputFileName);
             }
         } catch (Exception e) {
-            System.out.println("File not found");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -98,6 +95,15 @@ public class ExtractFile {
             fileOutputStream.write(aByte);
             noOfBytes--;
         }
+    }
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Invalid number of arguments");
+            return;
+        }
+        new ExtractFile(args[0]);
+
     }
 
 }

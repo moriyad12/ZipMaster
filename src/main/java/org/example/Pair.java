@@ -1,8 +1,8 @@
 package org.example;
 
 public class Pair implements Comparable<Pair> {
-    private Integer first;
-    private String second;
+    private final Integer first;
+    private final String second;
 
     public Pair(int first, String second) {
         this.first = first;
