@@ -17,8 +17,8 @@ class CompriseFileTest {
 
     @Test
     public void test2() {
-        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", 1);
-        new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\20011457.1.Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
+        new CompriseFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf", 1000000);
+        new ExtractFile("F:\\ZipMaster\\src\\main\\java\\org\\example\\20011457.1000000.Algorithms - Lectures 7 and 8 (Greedy algorithms).pdf.hc");
     }
 
     @Test

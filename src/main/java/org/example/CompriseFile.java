@@ -40,6 +40,7 @@ public class CompriseFile {
         writeHashMapToFile(convertFileName(fileName, noOfBytes));
         writeDataToFile(convertFileName(fileName, noOfBytes), fileName);
         System.out.println("Compressed file successfully!");
+        System.out.println(hashedValues.size());
     }
 
     private String convertFileName(String fileName, int noOfBytes) {
@@ -107,8 +108,10 @@ public class CompriseFile {
     public void writeHashMapToFile(String fileName) {
         try (BufferedOutputStream fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName, true))) {
             fileOutputStream.write(String.valueOf(noOfBytesRead).getBytes());
-            noOfBytesWritten+=String.valueOf(noOfBytesRead).getBytes().length;
             fileOutputStream.write('\r');
+            fileOutputStream.write(String.valueOf(noOfBytes).getBytes());
+            fileOutputStream.write('\r');
+            noOfBytesWritten += String.valueOf(noOfBytesRead).getBytes().length + String.valueOf(noOfBytes).getBytes().length;
             for (Map.Entry<String, String> entry : hashedValues.entrySet()) {
                 String value = entry.getValue();
                 String key = entry.getKey();
@@ -116,7 +119,10 @@ public class CompriseFile {
                     fileOutputStream.write(value.charAt(i));
                     noOfBytesWritten++;
                 }
-                fileOutputStream.write((char) key.length());
+                if (key.length() < noOfBytes)
+                    fileOutputStream.write('l');
+                else
+                    fileOutputStream.write('n');
                 for (int i = 0; i < key.length(); i++) {
                     fileOutputStream.write(key.charAt(i));
                     noOfBytesWritten++;

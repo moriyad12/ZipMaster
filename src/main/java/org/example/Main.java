@@ -2,6 +2,10 @@ package org.example;
 
 public class Main {
     public static void main(String[] args) {
+        /*
+        “I acknowledge that I am aware of the academic integrity guidelines of this course,
+         and that I worked on this assignment independently without any unauthorized help”.
+         */
         if (args.length != 2 && args.length != 3) {
             System.out.println("Invalid number of arguments!");
             return;
