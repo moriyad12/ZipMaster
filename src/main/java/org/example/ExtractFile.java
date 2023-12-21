@@ -32,7 +32,6 @@ public class ExtractFile {
         try (BufferedInputStream input = new BufferedInputStream(new FileInputStream(inputFileName))) {
             readNoOfBytes(input);
             readHashMapFromFile(input);
-            System.out.println(hashedValues.size());
             int byteOfInput;
             String temp = "";
             while ((byteOfInput = input.read()) != -1) {

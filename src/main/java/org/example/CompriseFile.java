@@ -40,7 +40,6 @@ public class CompriseFile {
         writeHashMapToFile(convertFileName(fileName, noOfBytes));
         writeDataToFile(convertFileName(fileName, noOfBytes), fileName);
         System.out.println("Compressed file successfully!");
-        System.out.println(hashedValues.size());
     }
 
     private String convertFileName(String fileName, int noOfBytes) {
